@@ -1,0 +1,465 @@
+---
+title: "DATA 605 Final project"
+author: "Samriti Malhotra"
+date: "12/15/2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=16)
+```
+
+
+# Computational Mathematics
+
+Solutions should be provided in a format that can be shared on R Pubs and Git hub  and You are also expected to make a short presentation via YouTube  and post that recording to the board.
+
+## Problem 1.
+
+Using R, generate a random variable X that has 10,000 random uniform numbers from 1 to N, where N can be any number of your choosing greater than or equal to 6.  Then generate a random variable Y that has 10,000 random normal numbers with a mean of N(N+1)/2.  
+
+Answer:
+
+Generate a random variable X
+```{r}
+# set seed value
+set.seed(1)
+N <- 6
+X <- runif(10000, min = 1, max = N)
+```
+Generate a random variable Y
+
+```{r}
+# mean 
+mu <- (N+1)/2
+Y <- rnorm(10000 , mean = mu)
+```
+
+
+
+Probability.   Calculate as a minimum the below probabilities a through c.  Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
+
+### 5 points  
+
+#### a.   P(X>x | X>y)	 =  0.7875256
+
+Answer:
+```{r}
+# first calculate x and y
+x <- median(X)
+y <- summary(Y)[2][[1]]
+
+
+#p(A|B) = P(AB)/P(B)
+sum(X>x & X > y)/sum(X>y)
+
+```
+The probability of X greater than median value of X given that X is greater than first quartile of y is 0.78.
+
+#### b.  P(X>x, Y>y)		= 0.3754
+
+Answer:
+
+```{r}
+#P(AB)
+pab <- sum(X>x & Y>y)/length(X)
+
+```
+The probability of X greater than median value of X and Y is greater than first quartile of y is 0.3754.
+
+#### c.  P(X<x | X>y)	= 0.2124744
+
+Answer:
+
+```{r}
+
+#p(A|B) = P(AB)/P(B)
+sum(X<x & X > y)/sum(X>y)
+```
+
+The probability of X less than median value of X given that X is greater than first quartile of y is 0.2124744.
+
+### 5 points.   Investigate whether P(X>x and Y>y)=P(X>x)P(Y>y) by building a table and evaluating the marginal and joint probabilities.
+
+Answer:
+
+```{r}
+tab <- c(sum(X<x & Y < y),
+       sum(X < x & Y == y),
+       sum(X < x & Y > y))
+tab <- rbind(tab,
+              c(sum(X==x & Y < y),
+       sum(X == x & Y == y),
+       sum(X == x & Y > y))
+             
+             )
+tab <- rbind(tab,
+              c(sum(X>x & Y < y),
+       sum(X > x & Y == y),
+       sum(X > x & Y > y))
+             )
+tab <- cbind(tab, tab[,1] + tab[,2] + tab[,3])
+tab <- rbind(tab, tab[1,] + tab[2,] + tab[3,])
+colnames(tab) <- c("Y<y", "Y=y", "Y>y", "Total")
+rownames(tab) <- c("X<x", "X=x", "X>x", "Total")
+knitr::kable(tab)
+
+
+```
+
+We've made joint and marginal probability table. Now we'll test the condition
+
+```{r}
+
+# P(X>x and Y>y)
+3754/10000
+#P(X>x)P(Y>y)
+((5000)/10000)*(7500/10000)
+```
+
+
+
+we can see that the condition holds since  P(X>x and Y>y) =  0.3754 and P(X>x)P(Y>y) = 0.375 are approximately equal.
+
+### 5 points.  Check to see if independence holds by using Fisher’s Exact Test and the Chi Square Test.  What is the difference between the two? Which is most appropriate?
+
+Answer:
+
+Fisher’s Exact Test
+```{r}
+fisher.test(table(X>x,Y>y))
+
+```
+The p-value is greater than zero we don't reject the null hypothesis. Two events are independent.
+
+The Chi Square Test
+
+```{r}
+chisq.test(table(X>x,Y>y))
+```
+The p-value is greeter than zero we don't reject the null hypothesis. Two events are independent.
+
+Fisher's exact test the null of independence of rows and columns in a contingency table with fixed marginals.
+
+Chi-squared test tests contingency table tests and goodness-of-fit tests.
+
+Fisher's exact test is appropriate here. Since the contingency table are fixed here in the table.
+
+
+## Problem 2
+
+You are to register for Kaggle.com (free) and compete in the House Prices: Advanced Regression Techniques competition.  https://www.kaggle.com/c/house-prices-advanced-regression-techniques .  I want you to do the following.
+
+
+
+Load the libraries
+```{r}
+library(readr)
+library(tidyverse)
+```
+
+Read the data
+
+```{r}
+train <- read_csv("train.csv")
+test <- read_csv("test.csv")
+```
+### 5 points.  Descriptive and Inferential Statistics.
+
+
+Provide univariate descriptive statistics and appropriate plots for the training data set. 
+
+Provide a scatter-plot matrix for at least two of the independent variables and the dependent variable.
+
+Derive a correlation matrix for any three quantitative variables in the data-set.  
+
+
+Discuss the meaning of your analysis.  Would you be worried about family-wise error? Why or why not?
+
+#### uni-variate descriptive statistics
+```{r}
+summary(train)
+```
+
+#### Plots
+
+```{r}
+hist(train$MSSubClass, main="Distribution of MSSubClass",xlab="MSSubClass")
+```
+
+MSSubClass is left skewed.
+
+```{r}
+barplot(table(train$MSZoning), main="MS Zoning")
+```
+RL has the highest frequency , C lowest frequency.
+
+```{r}
+hist(train$LotFrontage,main="Histogram of Lot Frontage",xlab="LotFrontage")
+```
+LotFrontage is left skewed.
+
+```{r}
+hist(train$LotArea,main="Distribution of LotArea",xlab="Lot Area")
+```
+
+Lot Area is left skewed with very high small values.
+
+```{r}
+hist(train$SalePrice,main="Distribution of Sale Price",xlab="Sale Price")
+```
+
+Sales price is slightly approximately normally distributed.
+.
+```{r}
+hist(train$GrLivArea,main="Distribution of Ground Living Area",xlab="Ground Living Area")
+```
+
+Ground Living Area is approximately normally distributed.
+
+#### Scatterplot matrix for "SalePrice","GrLivArea","LotFrontage"
+```{r}
+pairs(train[,c("SalePrice","GrLivArea","LotFrontage")])
+```
+
+From the scatter plot we can see that GrLiveArea and LotFrontage are positively correlated with Sale Price.
+
+#### Correlation matrix for any three quantitative variables
+
+SalePrice , GrLivArea and TotalBsmtSF
+```{r}
+cormat <- cor(train[,c("SalePrice","GrLivArea","TotalBsmtSF")])
+cormat
+```
+SalePrice shows strong positive correlation with GrLivArea and moderate correlation with TotalBsmTSF.
+
+GrLivArea shows Strong positive correlation with SalePrice and weak positive correlation with TotalBsmSF.
+
+TotalBsmSF shows moderate positive correlation with SalePrice and weak positive correlation with GrLivArea.
+
+Test the hypotheses that the correlations between each pairwise set of variables is 0 and provide an 80% confidence interval.  
+SalePrice vs GrLivArea
+
+Null Hypothesis: The correlation between GrLivArea and SalePrice is 0
+Alternative Hypothesis: The correlation between GrLivArea and SalePrice is other than 0
+
+```{r}
+cor.test(train$SalePrice, train$GrLivArea, conf.level = 0.8)
+```
+Since the the p value of the test is less than 0.05 at 5% level of significance we reject the null hypothesis and conclude that the  correlation between GrLivArea and SalePrice is other than 0.
+80 percent confidence interval of the test is 0.6939620 0.7285864
+
+Null Hypothesis: The correlation between TotalBsmtSF and SalePrice is 0
+Alternative Hypothesis: The correlation between TotalBsmtSF and SalePrice is other than 0
+```{r}
+cor.test(train$SalePrice, train$TotalBsmtSF, conf.level = 0.8)
+
+```
+
+
+Since the the p value of the test is less than 0.05 at 5% level of significance we reject the null hypothesis and conclude that the  correlation between TotalBsmtSF and SalePrice is other than 0.
+
+80 percent confidence interval of the test is 0.5792077 0.6239328
+
+
+Null Hypothesis: The correlation between TotalBsmtSF and GrLivArea is 0
+Alternative Hypothesis: The correlation between TotalBsmtSF and GrLivArea is other than 0
+```{r}
+
+cor.test(train$GrLivArea, train$TotalBsmtSF, conf.level = 0.8)
+
+```
+
+Since the the p value of the test is less than 0.05 at 5% level of significance we reject the null hypothesis and conclude that the  correlation between GrLivArea and TotalBsmtSF is other than 0.
+
+80 percent confidence interval of the test is 0.4327076 0.4879552
+
+#### family wise error
+
+```{r}
+FWE <- 1 - (1 - .05)^2 
+FWE
+```
+
+There is a 9.75% chance of type 1 error. Since the chance is low I will not be worried for family wise error .
+
+
+### 5 points. Linear Algebra and Correlation.  Invert your correlation matrix from above. (This is known as the precision matrix and contains variance inflation factors on the diagonal.) Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. Conduct LU decomposition on the matrix.  
+
+Answer:
+
+```{r}
+# find inverse
+precision_mat <- solve(cormat)
+
+# Multiply the correlation matrix by the precision matrix
+cor_prec <- cormat %*% precision_mat
+cor_prec
+
+#  multiply the precision matrix by the correlation matrix
+prec_cor <-   precision_mat %*% cormat
+prec_cor
+
+
+
+# LU Decomposistion
+library(pracma)
+lu(cormat)
+```
+
+
+ 
+#### 5 points.  Calculus-Based Probability & Statistics.  Many times, it makes sense to fit a closed form distribution to data.  Select a variable in the Kaggle.com training dataset that is skewed to the right, shift it so that the minimum value is absolutely above zero if necessary.  Then load the MASS package and run fitdistr to fit an exponential probability density function.  (See  https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html ). 
+
+Find the optimal value of  for this distribution, and then take 1000 samples from this exponential distribution using this value (e.g., rexp(1000, )).  Plot a histogram and compare it with a histogram of your original variable.  
+
+Using the exponential pdf, find the 5th and 95th percentiles using the cumulative distribution function (CDF).   
+
+Also generate a 95% confidence interval from the empirical data, assuming normality.  
+
+Finally, provide the empirical 5th percentile and 95th percentile of the data.  Discuss.
+
+
+Answer: We select LotArea as it's skewed to the right.
+
+#### optimal value of exponential for this distribution
+
+```{r}
+library(MASS)
+
+
+# Fitting of univariate distribution
+(fd <- fitdistr(train$LotArea, "exponential"))
+
+# optimam value of lambda
+fd$estimate
+```
+
+#### 1000 samples from this exponential distribution using this value 
+
+
+```{r}
+
+
+values <- rexp(1000, rate = fd$estimate)
+par(mfrow=c(1,2))
+# Actual vs simulated distribution
+hist(train$LotArea, breaks=40, prob=TRUE, xlab="Lot Area",
+     main="Lot Area Distribution")
+hist(values, breaks=40, prob=TRUE, xlab="Generated Data",
+     main="Generated Data's Distribution")
+
+```
+
+From the two plots we can see that our Lot Area approximately fits a exponential distribution. The fit isn't very well here. 
+
+#### 5th and 95th percentiles using the cumulative distribution function (CDF)
+
+```{r}
+Fn <- ecdf(values)
+values[Fn(values)==0.05]
+values[Fn(values)==0.95]
+```
+5% is 651.0724 and 95% is 31118.42
+
+#### 95% confidence interval from the empirical data
+```{r}
+
+
+t.test(values)$conf.int
+```
+#### empirical 5th percentile and 95th percentile of the data
+
+```{r}
+t.test(train$LotArea)$conf.int
+
+```
+
+
+### 10 points.  Modeling.  Build some type of multiple regression  model and submit your model to the competition board.  Provide your complete model summary and results with analysis.  Report your Kaggle.com user name and score.
+
+Answer:
+
+#### Model Summary:
+
+For building model I've removed the variables with very large number of missing values. Then recoded the categorical variables to numerical variable. After that I've fitted a multiple regression model. After fitting the multiple regression model I've used step wise regression to select best set of predictor variables. 
+
+#### Final Model: 
+
+Based on our final model model's R squared value is 0.8373. It's a good fitted model. The assumptions of multiple linear regression are satisfied here. 
+
+#### We'll see number of missing values in the variables
+
+```{r}
+sapply(train, function(x){sum(is.na(x))})
+```
+We'll remove variables having a large number of missing values. we'll also remove irremovable,YearBuilt
+
+```{r}
+train <-train[, !colnames(train) %in% c("Id","Alley","PoolQC","Fence","MiscFeature","FireplaceQu","LotFrontage","YearBuilt","YearRemodAdd")]
+
+test <- test[, !colnames(test) %in% c("Alley","PoolQC","Fence","MiscFeature","FireplaceQu","LotFrontage","YearBuilt","YearRemodAdd")]
+
+# convert categorical to numeric
+
+train <- train%>%
+  mutate_if(is.character, as.factor)%>%
+  mutate_if(is.factor, as.integer)
+
+test <- test %>%
+   mutate_if(is.character, as.factor)%>%
+  mutate_if(is.factor, as.integer)
+```
+
+Now we'll take only complete cases
+
+```{r}
+train <- na.omit(train)
+```
+
+#### We'll not fit a multiple regression model
+
+```{r}
+model_fit <- lm(SalePrice~., data = train)
+summary(model_fit)
+```
+
+#### We'll now do a stepwise regression based on ACI criterion
+
+```{r}
+step_model <- step(model_fit, trace = 0)
+summary(step_model)
+```
+
+#### Our Final model
+
+$SalePrice_{i} = -68655.8503 -159.8789237 * MSSubClass_{i}-2503.0986100* MSZoning_{i} + 0.3814427* LotArea_{i} +40806.0476399* Street_{i} -1310.5265783*   LotShape_{i} + 3914.9209353*LandContour_{i} +6115.5393877 * LandSlope_{i} -7336.6649714* Condition2_{i} -1224.6139620* HouseStyle_{i} + 12959.5730624  *   OverallQual_{i} + 4247.8548222 *OverallCond_{i} + 2632.4405086 *RoofStyle_{i} + 4131.9524015*RoofMatl_{i}  -614.3119175 * Exterior1st_{i} +  4335.1775745* MasVnrType_{i} +30.2912* MasVnrArea_{i} -8542.1790* ExterQual_{i}  -8542.1790*Foundation_{i} + BsmtQual_{i} +   3202.5638*BsmtCond_{i} -3678.7800* BsmtExposure_{i} -1168.7326* BsmtFinType1_{i} + 5.8341* BsmtFinSF1_{i} + 45.5519*1stFlrSF_{i} + 7523.9163* 2ndFlrSF_{i} + BsmtFullBath_{i} + 4197.5166 * FullBath_{i}  -4439.2566*BedroomAbvGr_{i} + 3456.5692*KitchenAbvGr_{i} -8746.4950* KitchenQual_{i} + 3456.5692*TotRmsAbvGrd_{i} + 3843.4812*Functional_{i} + 4035.7108*Fireplaces_{i} + 14425.7154*GarageCars_{i} +   4949.3592*PavedDrive_{i} + 18.4401*WoodDeckSF_{i} + 41.4813 *ScreenPorch_{i} +  2596.0989 * SaleCondition_{i}$
+
+R squared values 0.8373 indicates that our model is a very good model. Our fitted multiple regression model is 83.73% accurate in predicting Sales price based on the dependent variables. Since the F tests p value less than 0.05 at 5% level of significance our model is a valid model.
+
+#### Residual Analysis
+
+```{r}
+par(mfrow=c(2,2))
+plot(step_model)
+```
+
+From the residuals plot we can see that the assuptions of multiple regression model are satisfied. The residuals are approximately normally distributed. There is not heteroscedacity and pattern in the residuals.
+Do prediction
+
+```{r}
+predicted <- predict(step_model, test)
+sub <- data.frame(Id = test$Id, SalePrice=predicted)
+write.csv(sub,"submission.csv",row.names = FALSE)
+```
+
+
+#### Kaggle Submission
+
+Kaggle username is **simi0202 **. Final score is **0.46708**.
+
+
+

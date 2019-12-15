@@ -1,0 +1,1223 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={DATA 605 Final project problem 2},
+            pdfauthor={Samriti Malhotra},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{DATA 605 Final project problem 2}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Samriti Malhotra}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{12/15/2019}
+
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{4}
+\tableofcontents
+}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Required libraries}
+\KeywordTok{library}\NormalTok{(MASS)}
+\KeywordTok{library}\NormalTok{(psych)}
+\end{Highlighting}
+\end{Shaded}
+
+This project is created on the basis of data from Kaggle the House
+Prices: Advanced Regression Techniques competition on Kaggle
+\url{https://www.kaggle.com/c/house-prices-advanced-regression-techniques/}.
+
+\hypertarget{data-605-final-project-problem-2}{%
+\subsubsection{DATA 605 FINAL PROJECT PROBLEM
+2}\label{data-605-final-project-problem-2}}
+
+\emph{Description:}
+
+You are to register for Kaggle.com (free) and compete in the House
+Prices: Advanced Regression Techniques competition.
+\url{https://www.kaggle.com/c/house-prices-advanced-regression-techniques}
+. I want you to do the following.
+
+\begin{itemize}
+\item
+  5 points. Descriptive and Inferential Statistics. Provide univariate
+  descriptive statistics and appropriate plots for the training data
+  set. Provide a scatterplot matrix for at least two of the independent
+  variables and the dependent variable. Derive a correlation matrix for
+  any three quantitative variables in the dataset. Test the hypotheses
+  that the correlations between each pairwise set of variables is 0 and
+  provide an 80\% confidence interval. Discuss the meaning of your
+  analysis. Would you be worried about familywise error? Why or why not?
+\item
+  5 points. Linear Algebra and Correlation. Invert your correlation
+  matrix from above. (This is known as the precision matrix and contains
+  variance inflation factors on the diagonal.) Multiply the correlation
+  matrix by the precision matrix, and then multiply the precision matrix
+  by the correlation matrix. Conduct LU decomposition on the matrix.
+\item
+  5 points. Calculus-Based Probability \& Statistics. Many times, it
+  makes sense to fit a closed form distribution to data. Select a
+  variable in the Kaggle.com training dataset that is skewed to the
+  right, shift it so that the minimum value is absolutely above zero if
+  necessary. Then load the MASS package and run fitdistr to fit an
+  exponential probability density function. (See
+  \url{https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html}
+  ). Find the optimal value of  for this distribution, and then take
+  1000 samples from this exponential distribution using this value
+  (e.g., \(rexp(1000, \lambda))\). Plot a histogram and compare it with
+  a histogram of your original variable. Using the exponential pdf, find
+  the 5th and 95th percentiles using the cumulative distribution
+  function (CDF). Also generate a 95\% confidence interval from the
+  empirical data, assuming normality. Finally, provide the empirical 5th
+  percentile and 95th percentile of the data. Discuss.
+\item
+  10 points. Modeling. Build some type of multiple regression model and
+  submit your model to the competition board. Provide your complete
+  model summary and results with analysis. Report your Kaggle.com user
+  name and score.
+\end{itemize}
+
+\hypertarget{import-data}{%
+\subsubsection{Import Data}\label{import-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Import training data}
+\NormalTok{train <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'train.csv'}\NormalTok{)}
+
+\CommentTok{# General size of the data set}
+\KeywordTok{dim}\NormalTok{(train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1460   81
+\end{verbatim}
+
+As per common understanding sale price correlate with \texttt{LotArea} .
+We will base our analysis on this and see the importance of LotFrontage
+and other factors which help buyer get additional space.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(train}\OperatorTok{$}\NormalTok{LotFrontage)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##   21.00   59.00   69.00   70.05   80.00  313.00     259
+\end{verbatim}
+
+As we can see there are 259 NA's out of 1460 observations.In our
+analysis I lets assign variable \(X\) to \texttt{LotFrontage} and
+variable \(Y\) to \texttt{SalePrice}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X <-}\StringTok{ }\NormalTok{train}\OperatorTok{$}\NormalTok{LotFrontage}
+\NormalTok{Y <-}\StringTok{ }\NormalTok{train}\OperatorTok{$}\NormalTok{SalePrice}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{probability}{%
+\subsubsection{Probability}\label{probability}}
+
+Due the fact that \texttt{LotFrontage}, has some NA's values we are
+removing all observations with value NA.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{probdata <-}\StringTok{ }\NormalTok{train[, }\KeywordTok{c}\NormalTok{(}\StringTok{"LotFrontage"}\NormalTok{, }\StringTok{"SalePrice"}\NormalTok{)]}
+\NormalTok{probdata <-}\StringTok{ }\NormalTok{probdata[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(probdata}\OperatorTok{$}\NormalTok{LotFrontage),]}
+
+\KeywordTok{summary}\NormalTok{(probdata}\OperatorTok{$}\NormalTok{LotFrontage)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   21.00   59.00   69.00   70.05   80.00  313.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(probdata}\OperatorTok{$}\NormalTok{SalePrice)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   34900  127500  159500  180771  213500  755000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# First quartile of X variable}
+\NormalTok{x <-}\StringTok{ }\KeywordTok{quantile}\NormalTok{(probdata}\OperatorTok{$}\NormalTok{LotFrontage)[}\DecValTok{2}\NormalTok{]}
+\CommentTok{# Second quartile / median of Y variable}
+\NormalTok{y <-}\StringTok{ }\KeywordTok{median}\NormalTok{(probdata}\OperatorTok{$}\NormalTok{SalePrice)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{<}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{<}\NormalTok{y,]),}
+       \KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{<}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{==}\NormalTok{y,]),}
+       \KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{<}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{>}\NormalTok{y,]))}
+\NormalTok{t <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(t,}\KeywordTok{c}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{==}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{<}\NormalTok{y,]),}
+               \KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{==}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{==}\NormalTok{y,]),}
+               \KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{==}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{>}\NormalTok{y,])))}
+\NormalTok{t <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(t,}\KeywordTok{c}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{>}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{<}\NormalTok{y,]),}
+               \KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{>}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{==}\NormalTok{y,]),}
+               \KeywordTok{nrow}\NormalTok{(probdata[probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{>}\NormalTok{x }\OperatorTok{&}\StringTok{ }\NormalTok{probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{>}\NormalTok{y,])))}
+\NormalTok{t <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(t, t[,}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{t[,}\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{t[,}\DecValTok{3}\NormalTok{])}
+\NormalTok{t <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(t, t[}\DecValTok{1}\NormalTok{,] }\OperatorTok{+}\StringTok{ }\NormalTok{t[}\DecValTok{2}\NormalTok{,] }\OperatorTok{+}\StringTok{ }\NormalTok{t[}\DecValTok{3}\NormalTok{,])}
+\KeywordTok{colnames}\NormalTok{(t) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Y<y"}\NormalTok{, }\StringTok{"Y=y"}\NormalTok{, }\StringTok{"Y>y"}\NormalTok{, }\StringTok{"Total"}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(t) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"X<x"}\NormalTok{, }\StringTok{"X=x"}\NormalTok{, }\StringTok{"X>x"}\NormalTok{, }\StringTok{"Total"}\NormalTok{)}
+\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\toprule
+& Y\textless{}y & Y=y & Y\textgreater{}y & Total\tabularnewline
+\midrule
+\endhead
+X\textless{}x & 190 & 0 & 101 & 291\tabularnewline
+X=x & 5 & 0 & 8 & 13\tabularnewline
+X\textgreater{}x & 405 & 3 & 489 & 897\tabularnewline
+Total & 600 & 3 & 598 & 1201\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  \(P(X>x | Y>y)=\frac{489}{598} \approx 0.8177\)
+\item
+  \(P(X>x\ and\ Y>y) = \frac{489}{1201} \approx 0.4072\)
+\item
+  \(P(X<x | Y>y)=\frac{101}{598} \approx 0.1689\)
+\end{enumerate}
+
+Calculating Probability using table for further understanding .
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(}\KeywordTok{round}\NormalTok{(t}\OperatorTok{/}\DecValTok{1201}\NormalTok{,}\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\toprule
+& Y\textless{}y & Y=y & Y\textgreater{}y & Total\tabularnewline
+\midrule
+\endhead
+X\textless{}x & 0.1582 & 0.0000 & 0.0841 & 0.2423\tabularnewline
+X=x & 0.0042 & 0.0000 & 0.0067 & 0.0108\tabularnewline
+X\textgreater{}x & 0.3372 & 0.0025 & 0.4072 & 0.7469\tabularnewline
+Total & 0.4996 & 0.0025 & 0.4979 & 1.0000\tabularnewline
+\bottomrule
+\end{longtable}
+
+Consider probability (a) above: \(P(X>x | Y>y)=0.8177\).
+\(P(X>x)=0.7469\).
+
+\(P(X>x | Y>y) \ne P(X>x)\), these events are \textbf{not independent}.
+
+\hypertarget{chi-squared-test-to-evaluate-null-hypothesis}{%
+\paragraph{Chi-squared Test to Evaluate Null
+Hypothesis}\label{chi-squared-test-to-evaluate-null-hypothesis}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{chisq.test}\NormalTok{(}\KeywordTok{table}\NormalTok{(probdata}\OperatorTok{$}\NormalTok{LotFrontage}\OperatorTok{>}\NormalTok{x, probdata}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{>}\NormalTok{y))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with Yates' continuity correction
+## 
+## data:  table(probdata$LotFrontage > x, probdata$SalePrice > y)
+## X-squared = 30.881, df = 1, p-value = 0.00000002743
+\end{verbatim}
+
+As we see p-value which is nearly zero. Hence, we may reject the null
+hypothesis and agree that both events are not independent.
+
+\hypertarget{requirement-1-descriptive-and-inferential-statistics}{%
+\subsubsection{REQUIREMENT 1, Descriptive and Inferential
+Statistics}\label{requirement-1-descriptive-and-inferential-statistics}}
+
+Descriptive and Inferential Statistics. Provide univariate descriptive
+statistics and appropriate plots for the training data set. Provide a
+scatterplot matrix for at least two of the independent variables and the
+dependent variable. Derive a correlation matrix for any three
+quantitative variables in the dataset. Test the hypotheses that the
+correlations between each pairwise set of variables is 0 and provide an
+80\% confidence interval. Discuss the meaning of your analysis. Would
+you be worried about familywise error? Why or why not?
+
+To be able to effectivelly address this requirements I have decided to
+get:
+
+Get some basic statistics about the \texttt{LotFrontage} variable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(X)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##   21.00   59.00   69.00   70.05   80.00  313.00     259
+\end{verbatim}
+
+There are 1,201 valid observations between a very small/narrow lot of 21
+feet and large lot of 313 feet. Average frontage is 70.05 feet.
+
+Basic statistics about the \texttt{SalePrice} variable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(Y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   34900  129975  163000  180921  214000  755000
+\end{verbatim}
+
+Sale price is available for 1460 observations. It ranges from \$35,000
+to over \$750,000. Average sale price is \$180,921.
+
+Evaluating few plots.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{boxplot}\NormalTok{(X, }\DataTypeTok{main=}\StringTok{"Boxplot of Lot Frontage"}\NormalTok{)}
+\KeywordTok{hist}\NormalTok{(X, }\DataTypeTok{breaks=}\DecValTok{40}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Histogram of Lot Frontage"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+From our observation of \texttt{LotFrontage} boxplot and histogram, we
+can see that there are outliers and distibution is right-skewed.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{boxplot}\NormalTok{(Y, }\DataTypeTok{main=}\StringTok{"Boxplot of Sale Price"}\NormalTok{)}
+\KeywordTok{hist}\NormalTok{(Y, }\DataTypeTok{breaks=}\DecValTok{40}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Histogram of Sale Price"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+Distribution of \texttt{SalePrice} is close to the distribution of
+\texttt{LotFrontage}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(X, Y, }\DataTypeTok{xlab=}\StringTok{"Lot Frontage"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Sale Price"}\NormalTok{, }
+     \DataTypeTok{main=}\StringTok{"Scatterplot of Lot Frontage vs. Sale Price"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+As we observe from the scatter plot, there is no clear correlation. To
+further identify we decide to build and analyze a linear regression
+model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lm1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Y }\OperatorTok{~}\StringTok{ }\NormalTok{X)}
+\KeywordTok{summary}\NormalTok{(lm1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Y ~ X)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -314258  -48878  -19402   33290  533217 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 96149.04    6881.97   13.97   <2e-16 ***
+## X            1208.02      92.83   13.01   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 78090 on 1199 degrees of freedom
+##   (259 observations deleted due to missingness)
+## Multiple R-squared:  0.1238, Adjusted R-squared:  0.123 
+## F-statistic: 169.4 on 1 and 1199 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+From the observation we find that this model is not the best model for
+the analysis, as it is only covering approximately about 12\% which is
+small and distribution deviates from normal distribution. To check if we
+can get an imporoved result we will be conducting Box Cox Transformation
+and Log Transformation in the upcomimg section.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(lm1}\OperatorTok{$}\NormalTok{fitted.values, lm1}\OperatorTok{$}\NormalTok{residuals, }
+     \DataTypeTok{xlab=}\StringTok{"Fitted Values"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Residuals"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(lm1}\OperatorTok{$}\NormalTok{residuals); }\KeywordTok{qqline}\NormalTok{(lm1}\OperatorTok{$}\NormalTok{residuals)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-16-2.pdf}
+
+\hypertarget{box-cox-transformation}{%
+\paragraph{Box Cox Transformation}\label{box-cox-transformation}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bc <-}\StringTok{ }\KeywordTok{boxcox}\NormalTok{(lm1)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{(lambda <-}\StringTok{ }\NormalTok{bc}\OperatorTok{$}\NormalTok{x[}\KeywordTok{which.max}\NormalTok{(bc}\OperatorTok{$}\NormalTok{y)])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.06060606
+\end{verbatim}
+
+We can see optimal \(\lambda\) value is close to 0. In fact 0 is
+included in the 95\% confidence interval.
+
+Though we are not able to get the required improvement through the Box
+cox transformation but it has enabled us to reach closer to the
+necessary assumptions.
+
+\hypertarget{requirements-2-linear-algebra-and-correlation}{%
+\subsubsection{Requirements 2, (Linear Algebra and
+Correlation):}\label{requirements-2-linear-algebra-and-correlation}}
+
+Invert your correlation matrix from above. (This is known as the
+precision matrix and contains variance inflation factors on the
+diagonal.) Multiply the correlation matrix by the precision matrix, and
+then multiply the precision matrix by the correlation matrix. Conduct LU
+decomposition on the matrix.
+
+In this section we are selecting following 4 variables from the data and
+build a correlation matrix:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{TotalBsmtSF}: Total square feet of basement area
+\item
+  \texttt{MoSold}: Month sold
+\item
+  \texttt{OverallCond}: Rates the overall condition of the house (from
+  \emph{1-Very Poor} to \emph{10-Very Excellent})
+\item
+  \texttt{SalePrice}: Sale price
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cordata <-}\StringTok{ }\NormalTok{train[, }\KeywordTok{c}\NormalTok{(}\StringTok{"TotalBsmtSF"}\NormalTok{, }\StringTok{"MoSold"}\NormalTok{, }\StringTok{"OverallCond"}\NormalTok{, }\StringTok{"SalePrice"}\NormalTok{)]}
+\NormalTok{cormatrix <-}\StringTok{ }\KeywordTok{cor}\NormalTok{(cordata)}
+\KeywordTok{round}\NormalTok{(cormatrix,}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             TotalBsmtSF MoSold OverallCond SalePrice
+## TotalBsmtSF        1.00   0.01       -0.17      0.61
+## MoSold             0.01   1.00        0.00      0.05
+## OverallCond       -0.17   0.00        1.00     -0.08
+## SalePrice          0.61   0.05       -0.08      1.00
+\end{verbatim}
+
+Above we observed that basement correlates with the sale price , meaning
+larger basement suggests larger house and higher sale price.
+
+Inverting the correlation matrix to get the precision matrix.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{precmatrix <-}\StringTok{ }\KeywordTok{solve}\NormalTok{(cormatrix)}
+\KeywordTok{round}\NormalTok{(precmatrix,}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             TotalBsmtSF MoSold OverallCond SalePrice
+## TotalBsmtSF        1.64   0.03        0.20     -0.99
+## MoSold             0.03   1.00        0.00     -0.06
+## OverallCond        0.20   0.00        1.03     -0.05
+## SalePrice         -0.99  -0.06       -0.05      1.61
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{round}\NormalTok{(}\KeywordTok{diag}\NormalTok{(precmatrix),}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## TotalBsmtSF      MoSold OverallCond   SalePrice 
+##        1.64        1.00        1.03        1.61
+\end{verbatim}
+
+From the observation \texttt{TotalBsmtSF} and \texttt{SalePrice} have
+moderate correlation.
+
+\textbf{identity} matrix can be confirmed below by taking the general
+principle of \([Precision] = [Correlation]^{-1}\), then
+\([Precision]\times[Correlation]\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{round}\NormalTok{(cormatrix }\OperatorTok{%*%}\StringTok{ }\NormalTok{precmatrix,}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             TotalBsmtSF MoSold OverallCond SalePrice
+## TotalBsmtSF           1      0           0         0
+## MoSold                0      1           0         0
+## OverallCond           0      0           1         0
+## SalePrice             0      0           0         1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{round}\NormalTok{(precmatrix }\OperatorTok{%*%}\StringTok{ }\NormalTok{cormatrix,}\DecValTok{4}\NormalTok{) }\OperatorTok{==}\StringTok{ }\KeywordTok{round}\NormalTok{(cormatrix }\OperatorTok{%*%}\StringTok{ }\NormalTok{precmatrix,}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             TotalBsmtSF MoSold OverallCond SalePrice
+## TotalBsmtSF        TRUE   TRUE        TRUE      TRUE
+## MoSold             TRUE   TRUE        TRUE      TRUE
+## OverallCond        TRUE   TRUE        TRUE      TRUE
+## SalePrice          TRUE   TRUE        TRUE      TRUE
+\end{verbatim}
+
+\hypertarget{requirement-3-calculus-based-probability-and-statistics}{%
+\subsubsection{Requirement 3, Calculus-Based Probability and
+Statistics;}\label{requirement-3-calculus-based-probability-and-statistics}}
+
+Many times, it makes sense to fit a closed form distribution to data.
+Select a variable in the Kaggle.com training dataset that is skewed to
+the right, shift it so that the minimum value is absolutely above zero
+if necessary. Then load the MASS package and run fitdistr to fit an
+exponential probability density function. (See
+\url{https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html}
+). Find the optimal value of ??? for this distribution, and then take
+1000 samples from this exponential distribution using this value (e.g.,
+rexp(1000, ???)). Plot a histogram and compare it with a histogram of
+your original variable. Using the exponential pdf, find the 5th and 95th
+percentiles using the cumulative distribution function (CDF). Also
+generate a 95\% confidence interval from the empirical data, assuming
+normality. Finally, provide the empirical 5th percentile and 95th
+percentile of the data. Discuss.
+
+For this section we decide to see actual distribution of
+\texttt{LotFrontage} against gamma distribution using the
+\texttt{fitdistr} method of the \texttt{MASS} library.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Remove NAs}
+\NormalTok{X <-}\StringTok{ }\NormalTok{X[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(X)]}
+
+\CommentTok{# Fitting of univariate distribution}
+\NormalTok{(fd <-}\StringTok{ }\KeywordTok{fitdistr}\NormalTok{(X, }\StringTok{"gamma"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       shape         rate    
+##   8.760347516   0.125058578 
+##  (0.350766218) (0.005153394)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Actual vs simulated distribution}
+\KeywordTok{hist}\NormalTok{(X, }\DataTypeTok{breaks=}\DecValTok{40}\NormalTok{, }\DataTypeTok{prob=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{"Lot Frontage"}\NormalTok{,}
+     \DataTypeTok{main=}\StringTok{"Lot Frontage Distribution"}\NormalTok{)}
+\KeywordTok{curve}\NormalTok{(}\KeywordTok{dgamma}\NormalTok{(x, }\DataTypeTok{shape =}\NormalTok{ fd}\OperatorTok{$}\NormalTok{estimate[}\StringTok{'shape'}\NormalTok{], }\DataTypeTok{rate =}\NormalTok{ fd}\OperatorTok{$}\NormalTok{estimate[}\StringTok{'rate'}\NormalTok{]), }
+      \DataTypeTok{col=}\StringTok{"blue"}\NormalTok{, }\DataTypeTok{add=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+As we can see it look a good fit .
+
+To see if we can get a better option I will be using another
+distribution focused on \texttt{fitdistr}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{distributions <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"cauchy"}\NormalTok{, }\StringTok{"exponential"}\NormalTok{, }\StringTok{"gamma"}\NormalTok{, }\StringTok{"geometric"}\NormalTok{, }\StringTok{"log-normal"}\NormalTok{, }\StringTok{"lognormal"}\NormalTok{, }
+                   \StringTok{"logistic"}\NormalTok{, }\StringTok{"negative binomial"}\NormalTok{, }\StringTok{"normal"}\NormalTok{, }\StringTok{"Poisson"}\NormalTok{, }\StringTok{"t"}\NormalTok{, }\StringTok{"weibull"}\NormalTok{)}
+\NormalTok{logliks <-}\StringTok{ }\KeywordTok{c}\NormalTok{()}
+\ControlFlowTok{for}\NormalTok{ (d }\ControlFlowTok{in}\NormalTok{ distributions) \{}
+\NormalTok{  logliks <-}\StringTok{ }\KeywordTok{c}\NormalTok{(logliks, }\KeywordTok{fitdistr}\NormalTok{(X, d)}\OperatorTok{$}\NormalTok{loglik)}
+\NormalTok{\}}
+
+\NormalTok{logtable <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(distributions, logliks))}
+\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(logtable[}\KeywordTok{order}\NormalTok{(logtable}\OperatorTok{$}\NormalTok{logliks),], }
+             \DataTypeTok{row.names=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{col.names=}\KeywordTok{c}\NormalTok{(}\StringTok{"Distribution"}\NormalTok{, }\StringTok{"Log-Likelihood"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Distribution & Log-Likelihood\tabularnewline
+\midrule
+\endhead
+t & -5396.744870698\tabularnewline
+logistic & -5419.29549094738\tabularnewline
+negative binomial & -5453.90319970878\tabularnewline
+gamma & -5457.20013064461\tabularnewline
+log-normal & -5485.89040512713\tabularnewline
+lognormal & -5485.89040512713\tabularnewline
+cauchy & -5519.19936068162\tabularnewline
+normal & -5534.6532040307\tabularnewline
+weibull & -5559.41415360689\tabularnewline
+exponential & -6304.29962283632\tabularnewline
+geometric & -6312.83157278274\tabularnewline
+Poisson & -8309.11486947954\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{requirement-4-modeling}{%
+\subsubsection{Requirement 4 (Modeling)}\label{requirement-4-modeling}}
+
+Build some type of multiple regression model and submit your model to
+the competition board. Provide your complete model summary and results
+with analysis. Report your Kaggle.com user name and score.
+
+\hypertarget{description-of-steps-that-are-taken-in-modeling-and-the-final-outcome}{%
+\paragraph{Description of steps that are taken in modeling and the final
+outcome}\label{description-of-steps-that-are-taken-in-modeling-and-the-final-outcome}}
+
+The following are key steps taken in building the model:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Categorical variables were converted to numerical values.
+\item
+  Due to the number of missing data we have eliminated various variables
+  to reach at a conclusive outcome.\\
+\item
+  Target variable, \texttt{SalePrice}, was log-transformed to bring it
+  to the scale of other variables.
+\end{enumerate}
+
+Model formula submitted
+
+\begin{quote}
+formula = SalePrice \textasciitilde{} MSZoning + LotFrontage + LotArea +
+BldgType + OverallQual + OverallCond + YearBuilt + RoofMatl +
+Exterior1st + Exterior2nd + ExterCond + BsmtCond + BsmtFinType1 +
+BsmtFinSF1 + HeatingQC + CentralAir + X1stFlrSF + GrLivArea + FullBath +
+KitchenQual + Functional + GarageFinish + GarageArea + GarageCond +
+PavedDrive + WoodDeckSF + SaleCondition
+\end{quote}
+
+\hypertarget{modeling-work}{%
+\paragraph{Modeling Work}\label{modeling-work}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Read test data and add SalePrice column}
+\NormalTok{test <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{'test.csv'}\NormalTok{)}
+\NormalTok{test <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(test, }\DataTypeTok{SalePrice=}\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(test)))}
+
+\CommentTok{# Get training data and review summary statistics}
+\NormalTok{md <-}\StringTok{ }\NormalTok{train}
+\KeywordTok{summary}\NormalTok{(md)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        Id           MSSubClass       MSZoning     LotFrontage    
+##  Min.   :   1.0   Min.   : 20.0   C (all):  10   Min.   : 21.00  
+##  1st Qu.: 365.8   1st Qu.: 20.0   FV     :  65   1st Qu.: 59.00  
+##  Median : 730.5   Median : 50.0   RH     :  16   Median : 69.00  
+##  Mean   : 730.5   Mean   : 56.9   RL     :1151   Mean   : 70.05  
+##  3rd Qu.:1095.2   3rd Qu.: 70.0   RM     : 218   3rd Qu.: 80.00  
+##  Max.   :1460.0   Max.   :190.0                  Max.   :313.00  
+##                                                  NA's   :259     
+##     LotArea        Street      Alley      LotShape  LandContour
+##  Min.   :  1300   Grvl:   6   Grvl:  50   IR1:484   Bnk:  63   
+##  1st Qu.:  7554   Pave:1454   Pave:  41   IR2: 41   HLS:  50   
+##  Median :  9478               NA's:1369   IR3: 10   Low:  36   
+##  Mean   : 10517                           Reg:925   Lvl:1311   
+##  3rd Qu.: 11602                                                
+##  Max.   :215245                                                
+##                                                                
+##   Utilities      LotConfig    LandSlope   Neighborhood   Condition1  
+##  AllPub:1459   Corner : 263   Gtl:1382   NAmes  :225   Norm   :1260  
+##  NoSeWa:   1   CulDSac:  94   Mod:  65   CollgCr:150   Feedr  :  81  
+##                FR2    :  47   Sev:  13   OldTown:113   Artery :  48  
+##                FR3    :   4              Edwards:100   RRAn   :  26  
+##                Inside :1052              Somerst: 86   PosN   :  19  
+##                                          Gilbert: 79   RRAe   :  11  
+##                                          (Other):707   (Other):  15  
+##    Condition2     BldgType      HouseStyle   OverallQual    
+##  Norm   :1445   1Fam  :1220   1Story :726   Min.   : 1.000  
+##  Feedr  :   6   2fmCon:  31   2Story :445   1st Qu.: 5.000  
+##  Artery :   2   Duplex:  52   1.5Fin :154   Median : 6.000  
+##  PosN   :   2   Twnhs :  43   SLvl   : 65   Mean   : 6.099  
+##  RRNn   :   2   TwnhsE: 114   SFoyer : 37   3rd Qu.: 7.000  
+##  PosA   :   1                 1.5Unf : 14   Max.   :10.000  
+##  (Other):   2                 (Other): 19                   
+##   OverallCond      YearBuilt     YearRemodAdd    RoofStyle   
+##  Min.   :1.000   Min.   :1872   Min.   :1950   Flat   :  13  
+##  1st Qu.:5.000   1st Qu.:1954   1st Qu.:1967   Gable  :1141  
+##  Median :5.000   Median :1973   Median :1994   Gambrel:  11  
+##  Mean   :5.575   Mean   :1971   Mean   :1985   Hip    : 286  
+##  3rd Qu.:6.000   3rd Qu.:2000   3rd Qu.:2004   Mansard:   7  
+##  Max.   :9.000   Max.   :2010   Max.   :2010   Shed   :   2  
+##                                                              
+##     RoofMatl     Exterior1st   Exterior2nd    MasVnrType    MasVnrArea    
+##  CompShg:1434   VinylSd:515   VinylSd:504   BrkCmn : 15   Min.   :   0.0  
+##  Tar&Grv:  11   HdBoard:222   MetalSd:214   BrkFace:445   1st Qu.:   0.0  
+##  WdShngl:   6   MetalSd:220   HdBoard:207   None   :864   Median :   0.0  
+##  WdShake:   5   Wd Sdng:206   Wd Sdng:197   Stone  :128   Mean   : 103.7  
+##  ClyTile:   1   Plywood:108   Plywood:142   NA's   :  8   3rd Qu.: 166.0  
+##  Membran:   1   CemntBd: 61   CmentBd: 60                 Max.   :1600.0  
+##  (Other):   2   (Other):128   (Other):136                 NA's   :8       
+##  ExterQual ExterCond  Foundation  BsmtQual   BsmtCond    BsmtExposure
+##  Ex: 52    Ex:   3   BrkTil:146   Ex  :121   Fa  :  45   Av  :221    
+##  Fa: 14    Fa:  28   CBlock:634   Fa  : 35   Gd  :  65   Gd  :134    
+##  Gd:488    Gd: 146   PConc :647   Gd  :618   Po  :   2   Mn  :114    
+##  TA:906    Po:   1   Slab  : 24   TA  :649   TA  :1311   No  :953    
+##            TA:1282   Stone :  6   NA's: 37   NA's:  37   NA's: 38    
+##                      Wood  :  3                                      
+##                                                                      
+##  BsmtFinType1   BsmtFinSF1     BsmtFinType2   BsmtFinSF2     
+##  ALQ :220     Min.   :   0.0   ALQ :  19    Min.   :   0.00  
+##  BLQ :148     1st Qu.:   0.0   BLQ :  33    1st Qu.:   0.00  
+##  GLQ :418     Median : 383.5   GLQ :  14    Median :   0.00  
+##  LwQ : 74     Mean   : 443.6   LwQ :  46    Mean   :  46.55  
+##  Rec :133     3rd Qu.: 712.2   Rec :  54    3rd Qu.:   0.00  
+##  Unf :430     Max.   :5644.0   Unf :1256    Max.   :1474.00  
+##  NA's: 37                      NA's:  38                     
+##    BsmtUnfSF       TotalBsmtSF      Heating     HeatingQC CentralAir
+##  Min.   :   0.0   Min.   :   0.0   Floor:   1   Ex:741    N:  95    
+##  1st Qu.: 223.0   1st Qu.: 795.8   GasA :1428   Fa: 49    Y:1365    
+##  Median : 477.5   Median : 991.5   GasW :  18   Gd:241              
+##  Mean   : 567.2   Mean   :1057.4   Grav :   7   Po:  1              
+##  3rd Qu.: 808.0   3rd Qu.:1298.2   OthW :   2   TA:428              
+##  Max.   :2336.0   Max.   :6110.0   Wall :   4                       
+##                                                                     
+##  Electrical     X1stFlrSF      X2ndFlrSF     LowQualFinSF    
+##  FuseA:  94   Min.   : 334   Min.   :   0   Min.   :  0.000  
+##  FuseF:  27   1st Qu.: 882   1st Qu.:   0   1st Qu.:  0.000  
+##  FuseP:   3   Median :1087   Median :   0   Median :  0.000  
+##  Mix  :   1   Mean   :1163   Mean   : 347   Mean   :  5.845  
+##  SBrkr:1334   3rd Qu.:1391   3rd Qu.: 728   3rd Qu.:  0.000  
+##  NA's :   1   Max.   :4692   Max.   :2065   Max.   :572.000  
+##                                                              
+##    GrLivArea     BsmtFullBath     BsmtHalfBath        FullBath    
+##  Min.   : 334   Min.   :0.0000   Min.   :0.00000   Min.   :0.000  
+##  1st Qu.:1130   1st Qu.:0.0000   1st Qu.:0.00000   1st Qu.:1.000  
+##  Median :1464   Median :0.0000   Median :0.00000   Median :2.000  
+##  Mean   :1515   Mean   :0.4253   Mean   :0.05753   Mean   :1.565  
+##  3rd Qu.:1777   3rd Qu.:1.0000   3rd Qu.:0.00000   3rd Qu.:2.000  
+##  Max.   :5642   Max.   :3.0000   Max.   :2.00000   Max.   :3.000  
+##                                                                   
+##     HalfBath       BedroomAbvGr    KitchenAbvGr   KitchenQual
+##  Min.   :0.0000   Min.   :0.000   Min.   :0.000   Ex:100     
+##  1st Qu.:0.0000   1st Qu.:2.000   1st Qu.:1.000   Fa: 39     
+##  Median :0.0000   Median :3.000   Median :1.000   Gd:586     
+##  Mean   :0.3829   Mean   :2.866   Mean   :1.047   TA:735     
+##  3rd Qu.:1.0000   3rd Qu.:3.000   3rd Qu.:1.000              
+##  Max.   :2.0000   Max.   :8.000   Max.   :3.000              
+##                                                              
+##   TotRmsAbvGrd    Functional    Fireplaces    FireplaceQu   GarageType 
+##  Min.   : 2.000   Maj1:  14   Min.   :0.000   Ex  : 24    2Types :  6  
+##  1st Qu.: 5.000   Maj2:   5   1st Qu.:0.000   Fa  : 33    Attchd :870  
+##  Median : 6.000   Min1:  31   Median :1.000   Gd  :380    Basment: 19  
+##  Mean   : 6.518   Min2:  34   Mean   :0.613   Po  : 20    BuiltIn: 88  
+##  3rd Qu.: 7.000   Mod :  15   3rd Qu.:1.000   TA  :313    CarPort:  9  
+##  Max.   :14.000   Sev :   1   Max.   :3.000   NA's:690    Detchd :387  
+##                   Typ :1360                               NA's   : 81  
+##   GarageYrBlt   GarageFinish   GarageCars      GarageArea     GarageQual 
+##  Min.   :1900   Fin :352     Min.   :0.000   Min.   :   0.0   Ex  :   3  
+##  1st Qu.:1961   RFn :422     1st Qu.:1.000   1st Qu.: 334.5   Fa  :  48  
+##  Median :1980   Unf :605     Median :2.000   Median : 480.0   Gd  :  14  
+##  Mean   :1979   NA's: 81     Mean   :1.767   Mean   : 473.0   Po  :   3  
+##  3rd Qu.:2002                3rd Qu.:2.000   3rd Qu.: 576.0   TA  :1311  
+##  Max.   :2010                Max.   :4.000   Max.   :1418.0   NA's:  81  
+##  NA's   :81                                                              
+##  GarageCond  PavedDrive   WoodDeckSF      OpenPorchSF     EnclosedPorch   
+##  Ex  :   2   N:  90     Min.   :  0.00   Min.   :  0.00   Min.   :  0.00  
+##  Fa  :  35   P:  30     1st Qu.:  0.00   1st Qu.:  0.00   1st Qu.:  0.00  
+##  Gd  :   9   Y:1340     Median :  0.00   Median : 25.00   Median :  0.00  
+##  Po  :   7              Mean   : 94.24   Mean   : 46.66   Mean   : 21.95  
+##  TA  :1326              3rd Qu.:168.00   3rd Qu.: 68.00   3rd Qu.:  0.00  
+##  NA's:  81              Max.   :857.00   Max.   :547.00   Max.   :552.00  
+##                                                                           
+##    X3SsnPorch      ScreenPorch        PoolArea        PoolQC    
+##  Min.   :  0.00   Min.   :  0.00   Min.   :  0.000   Ex  :   2  
+##  1st Qu.:  0.00   1st Qu.:  0.00   1st Qu.:  0.000   Fa  :   2  
+##  Median :  0.00   Median :  0.00   Median :  0.000   Gd  :   3  
+##  Mean   :  3.41   Mean   : 15.06   Mean   :  2.759   NA's:1453  
+##  3rd Qu.:  0.00   3rd Qu.:  0.00   3rd Qu.:  0.000              
+##  Max.   :508.00   Max.   :480.00   Max.   :738.000              
+##                                                                 
+##    Fence      MiscFeature    MiscVal             MoSold      
+##  GdPrv:  59   Gar2:   2   Min.   :    0.00   Min.   : 1.000  
+##  GdWo :  54   Othr:   2   1st Qu.:    0.00   1st Qu.: 5.000  
+##  MnPrv: 157   Shed:  49   Median :    0.00   Median : 6.000  
+##  MnWw :  11   TenC:   1   Mean   :   43.49   Mean   : 6.322  
+##  NA's :1179   NA's:1406   3rd Qu.:    0.00   3rd Qu.: 8.000  
+##                           Max.   :15500.00   Max.   :12.000  
+##                                                              
+##      YrSold        SaleType    SaleCondition    SalePrice     
+##  Min.   :2006   WD     :1267   Abnorml: 101   Min.   : 34900  
+##  1st Qu.:2007   New    : 122   AdjLand:   4   1st Qu.:129975  
+##  Median :2008   COD    :  43   Alloca :  12   Median :163000  
+##  Mean   :2008   ConLD  :   9   Family :  20   Mean   :180921  
+##  3rd Qu.:2009   ConLI  :   5   Normal :1198   3rd Qu.:214000  
+##  Max.   :2010   ConLw  :   5   Partial: 125   Max.   :755000  
+##                 (Other):   9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Combine with testing data to do global replacements}
+\NormalTok{md <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(md, test)}
+
+\CommentTok{# Eliminate features with limited or missing data}
+\NormalTok{md <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(md, }\DataTypeTok{select=}\OperatorTok{-}\KeywordTok{c}\NormalTok{(Street, Alley, LandContour, Utilities, }
+\NormalTok{                           LandSlope, Condition2, MasVnrArea, Heating, }
+\NormalTok{                           BsmtFinSF2, X2ndFlrSF, LowQualFinSF, BsmtFullBath, }
+\NormalTok{                           BsmtHalfBath, HalfBath, PoolQC, PoolArea, MiscVal, }
+\NormalTok{                           MiscFeature, Fence, ScreenPorch, Fireplaces,}
+\NormalTok{                           EnclosedPorch, MoSold, YrSold))}
+\end{Highlighting}
+\end{Shaded}
+
+After eliminating incomplte data we have the following columns that are
+relevant for our analysis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{colnames}\NormalTok{(md)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Id"            "MSSubClass"    "MSZoning"      "LotFrontage"  
+##  [5] "LotArea"       "LotShape"      "LotConfig"     "Neighborhood" 
+##  [9] "Condition1"    "BldgType"      "HouseStyle"    "OverallQual"  
+## [13] "OverallCond"   "YearBuilt"     "YearRemodAdd"  "RoofStyle"    
+## [17] "RoofMatl"      "Exterior1st"   "Exterior2nd"   "MasVnrType"   
+## [21] "ExterQual"     "ExterCond"     "Foundation"    "BsmtQual"     
+## [25] "BsmtCond"      "BsmtExposure"  "BsmtFinType1"  "BsmtFinSF1"   
+## [29] "BsmtFinType2"  "BsmtUnfSF"     "TotalBsmtSF"   "HeatingQC"    
+## [33] "CentralAir"    "Electrical"    "X1stFlrSF"     "GrLivArea"    
+## [37] "FullBath"      "BedroomAbvGr"  "KitchenAbvGr"  "KitchenQual"  
+## [41] "TotRmsAbvGrd"  "Functional"    "FireplaceQu"   "GarageType"   
+## [45] "GarageYrBlt"   "GarageFinish"  "GarageCars"    "GarageArea"   
+## [49] "GarageQual"    "GarageCond"    "PavedDrive"    "WoodDeckSF"   
+## [53] "OpenPorchSF"   "X3SsnPorch"    "SaleType"      "SaleCondition"
+## [57] "SalePrice"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{md <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(md, }\DataTypeTok{select=}\OperatorTok{-}\KeywordTok{c}\NormalTok{(LotShape, YearRemodAdd, BsmtExposure, }
+\NormalTok{                           BsmtFinType2, TotalBsmtSF, TotRmsAbvGrd, }
+\NormalTok{                           FireplaceQu, GarageYrBlt, GarageCars))}
+\end{Highlighting}
+\end{Shaded}
+
+As we can see categorical variables were converted to numerical values
+and NAs are replaced with zeros.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{md}\OperatorTok{$}\NormalTok{Neighborhood <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{Neighborhood))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{MSZoning <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{MSZoning))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{LotConfig <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{LotConfig))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{Condition1 <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{Condition1))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{BldgType <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{BldgType))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{HouseStyle <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{HouseStyle))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{RoofStyle <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{RoofStyle))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{RoofMatl <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{RoofMatl))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{Exterior1st <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{Exterior1st))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{Exterior2nd <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{Exterior2nd))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{MasVnrType <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{MasVnrType))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{ExterQual <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{ExterQual))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{ExterCond <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{ExterCond))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{BsmtQual <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{BsmtQual))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{BsmtCond <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{BsmtCond))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{Electrical <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{Electrical))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{KitchenQual <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{KitchenQual))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{Functional <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{Functional))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{GarageType <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{GarageType))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{GarageFinish <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{GarageFinish))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{GarageCond <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{GarageCond))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{BsmtFinType1 <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{BsmtFinType1))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{PavedDrive <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{PavedDrive))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{SaleType <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{SaleType))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{SaleCondition <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{SaleCondition))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{Foundation <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{Foundation))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{HeatingQC <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{HeatingQC))}
+\NormalTok{md}\OperatorTok{$}\NormalTok{GarageQual <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{factor}\NormalTok{(md}\OperatorTok{$}\NormalTok{GarageQual))}
+
+\NormalTok{md[}\KeywordTok{is.na}\NormalTok{(md)] <-}\StringTok{ }\DecValTok{0}
+\end{Highlighting}
+\end{Shaded}
+
+Below we have Log-transform sales price in the training set for the
+purpose of training and testing sets .
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{test <-}\StringTok{ }\NormalTok{md[md}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{==}\DecValTok{0}\NormalTok{,]}
+\NormalTok{md <-}\StringTok{ }\NormalTok{md[md}\OperatorTok{$}\NormalTok{SalePrice}\OperatorTok{>}\DecValTok{0}\NormalTok{,]}
+
+\NormalTok{md}\OperatorTok{$}\NormalTok{SalePrice <-}\StringTok{ }\KeywordTok{log}\NormalTok{(md}\OperatorTok{$}\NormalTok{SalePrice)}
+
+\CommentTok{# Remove ID column from training data}
+\NormalTok{md <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(md, }\DataTypeTok{select=}\OperatorTok{-}\KeywordTok{c}\NormalTok{(Id))}
+
+\CommentTok{# Build initial model with all fields}
+\NormalTok{sale_lm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(SalePrice }\OperatorTok{~}\StringTok{ }\NormalTok{. , }\DataTypeTok{data=}\NormalTok{md)}
+\KeywordTok{summary}\NormalTok{(sale_lm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SalePrice ~ ., data = md)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.22119 -0.06729  0.00481  0.07152  0.57745 
+## 
+## Coefficients:
+##                    Estimate    Std. Error t value       Pr(>|t|)    
+## (Intercept)    6.8245491893  0.5866086932  11.634        < 2e-16 ***
+## MSSubClass    -0.0001499385  0.0002062562  -0.727       0.467375    
+## MSZoning      -0.0113649010  0.0069254126  -1.641       0.101011    
+## LotFrontage   -0.0003569532  0.0001241554  -2.875       0.004100 ** 
+## LotArea        0.0000021439  0.0000004345   4.934 0.000000900481 ***
+## LotConfig     -0.0024205201  0.0024645119  -0.982       0.326194    
+## Neighborhood   0.0006136411  0.0007167650   0.856       0.392073    
+## Condition1     0.0023177047  0.0046531586   0.498       0.618496    
+## BldgType      -0.0141640724  0.0067806927  -2.089       0.036897 *  
+## HouseStyle    -0.0006281607  0.0029067379  -0.216       0.828937    
+## OverallQual    0.0841413908  0.0053662685  15.680        < 2e-16 ***
+## OverallCond    0.0377076166  0.0043970790   8.576        < 2e-16 ***
+## YearBuilt      0.0018044387  0.0003013258   5.988 0.000000002685 ***
+## RoofStyle      0.0054973694  0.0051203865   1.074       0.283175    
+## RoofMatl       0.0142457900  0.0068518449   2.079       0.037787 *  
+## Exterior1st   -0.0044228762  0.0024047674  -1.839       0.066094 .  
+## Exterior2nd    0.0051075939  0.0021846799   2.338       0.019531 *  
+## MasVnrType     0.0066061971  0.0063761285   1.036       0.300341    
+## ExterQual     -0.0071693436  0.0089708972  -0.799       0.424322    
+## ExterCond      0.0126996544  0.0057910534   2.193       0.028471 *  
+## Foundation     0.0031759507  0.0076838702   0.413       0.679430    
+## BsmtQual      -0.0082611036  0.0057893473  -1.427       0.153816    
+## BsmtCond       0.0190941148  0.0056795398   3.362       0.000795 ***
+## BsmtFinType1  -0.0070904709  0.0028044244  -2.528       0.011569 *  
+## BsmtFinSF1     0.0000453185  0.0000175868   2.577       0.010071 *  
+## BsmtUnfSF     -0.0000022554  0.0000185693  -0.121       0.903347    
+## HeatingQC     -0.0111870208  0.0027751580  -4.031 0.000058470318 ***
+## CentralAirY    0.0890470168  0.0196187285   4.539 0.000006135533 ***
+## Electrical     0.0022272879  0.0041701417   0.534       0.593354    
+## X1stFlrSF      0.0000761228  0.0000222085   3.428       0.000626 ***
+## GrLivArea      0.0002137006  0.0000161953  13.195        < 2e-16 ***
+## FullBath       0.0277160050  0.0112363373   2.467       0.013757 *  
+## BedroomAbvGr   0.0095702265  0.0068565312   1.396       0.162999    
+## KitchenAbvGr  -0.0269103105  0.0219370079  -1.227       0.220137    
+## KitchenQual   -0.0299140191  0.0066383046  -4.506 0.000007141896 ***
+## Functional     0.0164999406  0.0043389159   3.803       0.000149 ***
+## GarageType    -0.0054905209  0.0028665986  -1.915       0.055650 .  
+## GarageFinish  -0.0125810692  0.0064817604  -1.941       0.052457 .  
+## GarageArea     0.0001610149  0.0000294003   5.477 0.000000051244 ***
+## GarageQual     0.0045933999  0.0076827806   0.598       0.550014    
+## GarageCond     0.0162230798  0.0079750856   2.034       0.042116 *  
+## PavedDrive     0.0201491987  0.0095357241   2.113       0.034774 *  
+## WoodDeckSF     0.0001147680  0.0000340577   3.370       0.000772 ***
+## OpenPorchSF   -0.0000148112  0.0000654207  -0.226       0.820923    
+## X3SsnPorch     0.0001175080  0.0001348675   0.871       0.383747    
+## SaleType      -0.0005982979  0.0026325612  -0.227       0.820248    
+## SaleCondition  0.0238176500  0.0038100777   6.251 0.000000000538 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.1486 on 1413 degrees of freedom
+## Multiple R-squared:  0.866,  Adjusted R-squared:  0.8617 
+## F-statistic: 198.6 on 46 and 1413 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+To have more clearer understanding we have Optimized the model using
+\texttt{stepAIC} method.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{step_lm <-}\StringTok{ }\KeywordTok{stepAIC}\NormalTok{(sale_lm, }\DataTypeTok{trace=}\OtherTok{FALSE}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(step_lm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SalePrice ~ MSZoning + LotFrontage + LotArea + BldgType + 
+##     OverallQual + OverallCond + YearBuilt + RoofMatl + Exterior1st + 
+##     Exterior2nd + ExterCond + BsmtQual + BsmtCond + BsmtFinType1 + 
+##     BsmtFinSF1 + HeatingQC + CentralAir + X1stFlrSF + GrLivArea + 
+##     FullBath + KitchenQual + Functional + GarageType + GarageFinish + 
+##     GarageArea + GarageCond + PavedDrive + WoodDeckSF + SaleCondition, 
+##     data = md)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.24086 -0.06623  0.00565  0.07351  0.58820 
+## 
+## Coefficients:
+##                    Estimate    Std. Error t value          Pr(>|t|)    
+## (Intercept)    6.6009060484  0.5122756066  12.885           < 2e-16 ***
+## MSZoning      -0.0135208963  0.0066378388  -2.037          0.041840 *  
+## LotFrontage   -0.0003484392  0.0001218122  -2.860          0.004292 ** 
+## LotArea        0.0000021492  0.0000004291   5.009 0.000000616289858 ***
+## BldgType      -0.0212957859  0.0036613594  -5.816 0.000000007408787 ***
+## OverallQual    0.0863505864  0.0050137850  17.223           < 2e-16 ***
+## OverallCond    0.0382499520  0.0042948768   8.906           < 2e-16 ***
+## YearBuilt      0.0019266454  0.0002610902   7.379 0.000000000000269 ***
+## RoofMatl       0.0128618101  0.0067259235   1.912          0.056041 .  
+## Exterior1st   -0.0042612207  0.0023702750  -1.798          0.072424 .  
+## Exterior2nd    0.0047060558  0.0021372511   2.202          0.027830 *  
+## ExterCond      0.0122796320  0.0057027593   2.153          0.031464 *  
+## BsmtQual      -0.0085045662  0.0054468491  -1.561          0.118657    
+## BsmtCond       0.0185608151  0.0054753119   3.390          0.000718 ***
+## BsmtFinType1  -0.0072791564  0.0026341330  -2.763          0.005794 ** 
+## BsmtFinSF1     0.0000450241  0.0000118126   3.812          0.000144 ***
+## HeatingQC     -0.0113964832  0.0027047614  -4.213 0.000026719179231 ***
+## CentralAirY    0.0937487472  0.0190062531   4.933 0.000000906709975 ***
+## X1stFlrSF      0.0000842612  0.0000148898   5.659 0.000000018369101 ***
+## GrLivArea      0.0002151555  0.0000126530  17.004           < 2e-16 ***
+## FullBath       0.0268033002  0.0107570156   2.492          0.012826 *  
+## KitchenQual   -0.0312929251  0.0061043433  -5.126 0.000000335857780 ***
+## Functional     0.0159773907  0.0042064430   3.798          0.000152 ***
+## GarageType    -0.0051096355  0.0028169164  -1.814          0.069901 .  
+## GarageFinish  -0.0125104973  0.0063597975  -1.967          0.049362 *  
+## GarageArea     0.0001617009  0.0000284126   5.691 0.000000015284918 ***
+## GarageCond     0.0200256677  0.0049076281   4.081 0.000047417532552 ***
+## PavedDrive     0.0205367649  0.0094337381   2.177          0.029647 *  
+## WoodDeckSF     0.0001163306  0.0000336756   3.454          0.000568 ***
+## SaleCondition  0.0242121985  0.0036888630   6.564 0.000000000073266 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.1483 on 1430 degrees of freedom
+## Multiple R-squared:  0.8649, Adjusted R-squared:  0.8622 
+## F-statistic: 315.8 on 29 and 1430 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\(R^2\) is over 0.86 which seems like a good fit.
+
+Residuals are checked below .
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(step_lm}\OperatorTok{$}\NormalTok{fitted.values, step_lm}\OperatorTok{$}\NormalTok{residuals, }
+     \DataTypeTok{xlab=}\StringTok{"Fitted Values"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Residuals"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Fitted Values vs. Residuals"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqnorm}\NormalTok{(step_lm}\OperatorTok{$}\NormalTok{residuals); }\KeywordTok{qqline}\NormalTok{(step_lm}\OperatorTok{$}\NormalTok{residuals)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{DATA_605_Final_Project_problem2_files/figure-latex/unnamed-chunk-29-2.pdf}
+
+As observed residuals are normally distributed.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Predict prices for test data}
+\NormalTok{pred_saleprice <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(step_lm, test)}
+\CommentTok{# Convert from log back to real world number}
+\NormalTok{pred_saleprice <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(pred_saleprice, exp)}
+\CommentTok{# Prepare data frame for submission}
+\NormalTok{kaggle <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Id=}\NormalTok{test}\OperatorTok{$}\NormalTok{Id, }\DataTypeTok{SalePrice=}\NormalTok{pred_saleprice)}
+\KeywordTok{write.csv}\NormalTok{(kaggle, }\DataTypeTok{file =} \StringTok{"submission.csv"}\NormalTok{, }\DataTypeTok{row.names=}\OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{kaggle-submission}{%
+\paragraph{Kaggle Submission}\label{kaggle-submission}}
+
+My Kaggle username is \textbf{simi0202}. My Score as of Dec 15 2019 is
+\textbf{0.13513}
+
+The Submission Data is available on my github reposistory
+\url{https://github.com/samriti0202/DATA-605/FINAL}.
+
+Thank you .
+
+
+\end{document}

@@ -1,0 +1,432 @@
+---
+title: "DATA 605 Final project problem 2"
+author: "Samriti Malhotra"
+date: "12/15/2019"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: '4'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("scipen" = 10)
+```
+
+```{r}
+# Required libraries
+library(MASS)
+library(psych)
+```
+
+This project is created on the basis of data from Kaggle the House Prices: Advanced Regression Techniques competition on Kaggle <https://www.kaggle.com/c/house-prices-advanced-regression-techniques/>. 
+
+
+### DATA 605 FINAL PROJECT PROBLEM 2
+
+*Description:*
+
+You are to register for Kaggle.com (free) and compete in the House Prices: Advanced Regression Techniques competition.  https://www.kaggle.com/c/house-prices-advanced-regression-techniques .  I want you to do the following.
+
+* 5 points.  Descriptive and Inferential Statistics. Provide univariate descriptive statistics and appropriate plots for the training data set.  Provide a scatterplot matrix for at least two of the independent variables and the dependent variable. Derive a correlation matrix for any three quantitative variables in the dataset.  Test the hypotheses that the correlations between each pairwise set of variables is 0 and provide an 80% confidence interval.  Discuss the meaning of your analysis.  Would you be worried about familywise error? Why or why not?
+
+* 5 points. Linear Algebra and Correlation.  Invert your correlation matrix from above. (This is known as the precision matrix and contains variance inflation factors on the diagonal.) Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. Conduct LU decomposition on the matrix.  
+
+* 5 points.  Calculus-Based Probability & Statistics.  Many times, it makes sense to fit a closed form distribution to data.  Select a variable in the Kaggle.com training dataset that is skewed to the right, shift it so that the minimum value is absolutely above zero if necessary.  Then load the MASS package and run fitdistr to fit an exponential probability density function.  (See  https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html ).  Find the optimal value of  for this distribution, and then take 1000 samples from this exponential distribution using this value (e.g., $rexp(1000, \lambda))$.  Plot a histogram and compare it with a histogram of your original variable.   Using the exponential pdf, find the 5th and 95th percentiles using the cumulative distribution function (CDF).   Also generate a 95% confidence interval from the empirical data, assuming normality.  Finally, provide the empirical 5th percentile and 95th percentile of the data.  Discuss.
+
+* 10 points.  Modeling.  Build some type of multiple regression  model and submit your model to the competition board.  Provide your complete model summary and results with analysis.  Report your Kaggle.com user name and score.
+
+
+### Import Data
+
+```{r}
+# Import training data
+train <- read.csv('train.csv')
+
+# General size of the data set
+dim(train)
+```
+
+As per common understanding sale price correlate with  `LotArea` . We will base our analysis on this and see the importance of LotFrontage and other factors which help buyer get additional space.
+
+```{r}
+summary(train$LotFrontage)
+```
+
+As we can see there are 259 NA's out of 1460 observations.In our analysis I lets assign variable $X$ to `LotFrontage` and variable $Y$ to `SalePrice`.
+
+```{r}
+X <- train$LotFrontage
+Y <- train$SalePrice
+```
+
+### Probability
+
+Due the fact that  `LotFrontage`, has some NA's values we are removing all observations with value NA.
+
+```{r}
+probdata <- train[, c("LotFrontage", "SalePrice")]
+probdata <- probdata[!is.na(probdata$LotFrontage),]
+
+summary(probdata$LotFrontage)
+summary(probdata$SalePrice)
+```
+
+```{r}
+# First quartile of X variable
+x <- quantile(probdata$LotFrontage)[2]
+# Second quartile / median of Y variable
+y <- median(probdata$SalePrice)
+```
+
+```{r}
+t <- c(nrow(probdata[probdata$LotFrontage<x & probdata$SalePrice<y,]),
+       nrow(probdata[probdata$LotFrontage<x & probdata$SalePrice==y,]),
+       nrow(probdata[probdata$LotFrontage<x & probdata$SalePrice>y,]))
+t <- rbind(t,c(nrow(probdata[probdata$LotFrontage==x & probdata$SalePrice<y,]),
+               nrow(probdata[probdata$LotFrontage==x & probdata$SalePrice==y,]),
+               nrow(probdata[probdata$LotFrontage==x & probdata$SalePrice>y,])))
+t <- rbind(t,c(nrow(probdata[probdata$LotFrontage>x & probdata$SalePrice<y,]),
+               nrow(probdata[probdata$LotFrontage>x & probdata$SalePrice==y,]),
+               nrow(probdata[probdata$LotFrontage>x & probdata$SalePrice>y,])))
+t <- cbind(t, t[,1] + t[,2] + t[,3])
+t <- rbind(t, t[1,] + t[2,] + t[3,])
+colnames(t) <- c("Y<y", "Y=y", "Y>y", "Total")
+rownames(t) <- c("X<x", "X=x", "X>x", "Total")
+knitr::kable(t)
+```
+
+a. $P(X>x | Y>y)=\frac{489}{598} \approx 0.8177$
+b. $P(X>x\ and\ Y>y) = \frac{489}{1201} \approx 0.4072$
+c. $P(X<x | Y>y)=\frac{101}{598} \approx 0.1689$
+
+Calculating Probability using table for further understanding .
+
+```{r}
+knitr::kable(round(t/1201,4))
+```
+
+Consider probability (a) above: $P(X>x | Y>y)=0.8177$. $P(X>x)=0.7469$. 
+
+ $P(X>x | Y>y) \ne P(X>x)$, these events are **not independent**. 
+
+#### Chi-squared Test to Evaluate Null Hypothesis 
+
+
+```{r}
+chisq.test(table(probdata$LotFrontage>x, probdata$SalePrice>y))
+```
+
+As we see p-value which is nearly zero. Hence, we may reject the null hypothesis and agree that both  events are not independent.
+
+### REQUIREMENT 1, Descriptive and Inferential Statistics
+
+Descriptive and Inferential Statistics. Provide univariate descriptive statistics and appropriate plots for the training data set.  Provide a scatterplot matrix for at least two of the independent variables and the dependent variable. Derive a correlation matrix for any three quantitative variables in the dataset.  Test the hypotheses that the correlations between each pairwise set of variables is 0 and provide an 80% confidence interval.  Discuss the meaning of your analysis.  Would you be worried about familywise error? Why or why not?
+
+
+To be able to effectivelly address this requirements I have decided to get: 
+
+Get some basic statistics about the `LotFrontage` variable.
+
+```{r}
+summary(X)
+
+```
+
+There are 1,201 valid observations between a very small/narrow lot of 21 feet and large lot of 313 feet. Average frontage is 70.05 feet.
+
+
+Basic statistics about the `SalePrice` variable.
+
+```{r}
+summary(Y)
+```
+
+Sale price is available for 1460 observations. It ranges from  \$35,000 to over \$750,000. Average sale price is $180,921. 
+
+Evaluating few plots. 
+
+```{r}
+par(mfrow=c(1,2))
+boxplot(X, main="Boxplot of Lot Frontage")
+hist(X, breaks=40, main="Histogram of Lot Frontage")
+```
+
+From our observation of  `LotFrontage` boxplot and histogram, we can see that there are  outliers and distibution is right-skewed. 
+
+```{r}
+par(mfrow=c(1,2))
+boxplot(Y, main="Boxplot of Sale Price")
+hist(Y, breaks=40, main="Histogram of Sale Price")
+```
+
+Distribution of `SalePrice` is close to the distribution of `LotFrontage`. 
+
+```{r}
+plot(X, Y, xlab="Lot Frontage", ylab="Sale Price", 
+     main="Scatterplot of Lot Frontage vs. Sale Price")
+```
+
+As we observe from the  scatter plot, there is no clear correlation. To further identify we decide to build and analyze a linear regression model. 
+
+```{r}
+lm1 <- lm(Y ~ X)
+summary(lm1)
+```
+
+From the observation we find that this model is not the best model for the analysis, as it is only covering approximately about 12% which is small and distribution deviates from normal distribution. To check if we can get an imporoved result we will be conducting Box Cox Transformation and Log Transformation in the upcomimg section. 
+```{r}
+plot(lm1$fitted.values, lm1$residuals, 
+     xlab="Fitted Values", ylab="Residuals")
+abline(h=0)
+qqnorm(lm1$residuals); qqline(lm1$residuals)
+```
+
+#### Box Cox Transformation
+
+
+```{r}
+bc <- boxcox(lm1)
+(lambda <- bc$x[which.max(bc$y)])
+```
+
+We can see optimal $\lambda$ value is close to 0. In fact 0 is included in the 95% confidence interval. 
+
+Though we are not able to get the required improvement through the Box cox transformation but it has enabled us to reach closer to the necessary assumptions.
+
+### Requirements 2, (Linear Algebra and Correlation): 
+
+Invert your correlation matrix from above. (This is known as the precision matrix and contains variance inflation factors on the diagonal.) Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. Conduct LU decomposition on the matrix.  
+
+
+In this section we are selecting following 4 variables from the data and build a correlation matrix:
+
+- `TotalBsmtSF`: Total square feet of basement area
+- `MoSold`: Month sold
+- `OverallCond`: Rates the overall condition of the house (from _1-Very Poor_ to _10-Very Excellent_)
+- `SalePrice`: Sale price
+
+```{r}
+cordata <- train[, c("TotalBsmtSF", "MoSold", "OverallCond", "SalePrice")]
+cormatrix <- cor(cordata)
+round(cormatrix,2)
+```
+
+Above we observed that basement correlates with the sale price , meaning larger basement suggests larger house and higher sale price.
+
+
+Inverting the correlation matrix to get the precision matrix. 
+
+```{r}
+precmatrix <- solve(cormatrix)
+round(precmatrix,2)
+round(diag(precmatrix),2)
+```
+From the observation `TotalBsmtSF` and `SalePrice`  have moderate correlation. 
+
+ **identity** matrix can be confirmed below by taking the general principle of $[Precision] = [Correlation]^{-1}$, then $[Precision]\times[Correlation]$. 
+
+```{r}
+round(cormatrix %*% precmatrix,4)
+round(precmatrix %*% cormatrix,4) == round(cormatrix %*% precmatrix,4)
+```
+
+### Requirement 3, Calculus-Based Probability and Statistics; 
+
+Many times, it makes sense to fit a closed form distribution to data.  Select a variable in the Kaggle.com training dataset that is skewed to the right, shift it so that the minimum value is absolutely above zero if necessary.  Then load the MASS package and run fitdistr to fit an exponential probability density function.  (See  https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html ).  Find the optimal value of ??? for this distribution, and then take 1000 samples from this exponential distribution using this value (e.g., rexp(1000, ???)).  Plot a histogram and compare it with a histogram of your original variable.   Using the exponential pdf, find the 5th and 95th percentiles using the cumulative distribution function (CDF).   Also generate a 95% confidence interval from the empirical data, assuming normality.  Finally, provide the empirical 5th percentile and 95th percentile of the data.  Discuss.
+
+
+For this section we decide to see actual distribution of `LotFrontage` against gamma distribution using the `fitdistr` method of the `MASS` library.
+
+```{r}
+# Remove NAs
+X <- X[!is.na(X)]
+
+# Fitting of univariate distribution
+(fd <- fitdistr(X, "gamma"))
+
+# Actual vs simulated distribution
+hist(X, breaks=40, prob=TRUE, xlab="Lot Frontage",
+     main="Lot Frontage Distribution")
+curve(dgamma(x, shape = fd$estimate['shape'], rate = fd$estimate['rate']), 
+      col="blue", add=TRUE)
+```
+
+As we can see it look a good fit .
+
+To see if we can get a better option I will be using another distribution focused  on `fitdistr`.
+
+```{r warning=FALSE}
+distributions <- c("cauchy", "exponential", "gamma", "geometric", "log-normal", "lognormal", 
+                   "logistic", "negative binomial", "normal", "Poisson", "t", "weibull")
+logliks <- c()
+for (d in distributions) {
+  logliks <- c(logliks, fitdistr(X, d)$loglik)
+}
+
+logtable <- as.data.frame(cbind(distributions, logliks))
+knitr::kable(logtable[order(logtable$logliks),], 
+             row.names=FALSE, col.names=c("Distribution", "Log-Likelihood"))
+```
+
+
+### Requirement 4 (Modeling)
+
+
+Build some type of multiple regression  model and submit your model to the competition board.  Provide your complete model summary and results with analysis.  Report your Kaggle.com user name and score.
+
+#### Description of steps that are taken in modeling and the final outcome 
+
+The following are key steps taken in building the model:
+
+1. Categorical variables were converted to numerical values.
+2. Due to the number of missing data we have eliminated  various variables to reach at a conclusive outcome.  
+3.  Target variable, `SalePrice`, was log-transformed to bring it to the scale of other variables. 
+
+Model formula submitted 
+
+> formula = SalePrice ~ MSZoning + LotFrontage + LotArea + BldgType + 
+    OverallQual + OverallCond + YearBuilt + RoofMatl + Exterior1st + 
+    Exterior2nd + ExterCond + BsmtCond + BsmtFinType1 + BsmtFinSF1 + 
+    HeatingQC + CentralAir + X1stFlrSF + GrLivArea + FullBath + 
+    KitchenQual + Functional + GarageFinish + GarageArea + GarageCond + 
+    PavedDrive + WoodDeckSF + SaleCondition
+
+#### Modeling Work
+
+```{r}
+# Read test data and add SalePrice column
+test <- read.csv('test.csv')
+test <- cbind(test, SalePrice=rep(0,nrow(test)))
+
+# Get training data and review summary statistics
+md <- train
+summary(md)
+
+# Combine with testing data to do global replacements
+md <- rbind(md, test)
+
+# Eliminate features with limited or missing data
+md <- subset(md, select=-c(Street, Alley, LandContour, Utilities, 
+                           LandSlope, Condition2, MasVnrArea, Heating, 
+                           BsmtFinSF2, X2ndFlrSF, LowQualFinSF, BsmtFullBath, 
+                           BsmtHalfBath, HalfBath, PoolQC, PoolArea, MiscVal, 
+                           MiscFeature, Fence, ScreenPorch, Fireplaces,
+                           EnclosedPorch, MoSold, YrSold))
+```
+
+After eliminating incomplte data we have the following columns that are relevant for our analysis.  
+
+
+
+```{r}
+colnames(md)
+```
+
+```{r}
+md <- subset(md, select=-c(LotShape, YearRemodAdd, BsmtExposure, 
+                           BsmtFinType2, TotalBsmtSF, TotRmsAbvGrd, 
+                           FireplaceQu, GarageYrBlt, GarageCars))
+```
+
+
+As we can see categorical variables were converted to numerical values and  NAs are replaced with zeros.
+
+```{r}
+md$Neighborhood <- as.integer(factor(md$Neighborhood))
+md$MSZoning <- as.integer(factor(md$MSZoning))
+md$LotConfig <- as.integer(factor(md$LotConfig))
+md$Condition1 <- as.integer(factor(md$Condition1))
+md$BldgType <- as.integer(factor(md$BldgType))
+md$HouseStyle <- as.integer(factor(md$HouseStyle))
+md$RoofStyle <- as.integer(factor(md$RoofStyle))
+md$RoofMatl <- as.integer(factor(md$RoofMatl))
+md$Exterior1st <- as.integer(factor(md$Exterior1st))
+md$Exterior2nd <- as.integer(factor(md$Exterior2nd))
+md$MasVnrType <- as.integer(factor(md$MasVnrType))
+md$ExterQual <- as.integer(factor(md$ExterQual))
+md$ExterCond <- as.integer(factor(md$ExterCond))
+md$BsmtQual <- as.integer(factor(md$BsmtQual))
+md$BsmtCond <- as.integer(factor(md$BsmtCond))
+md$Electrical <- as.integer(factor(md$Electrical))
+md$KitchenQual <- as.integer(factor(md$KitchenQual))
+md$Functional <- as.integer(factor(md$Functional))
+md$GarageType <- as.integer(factor(md$GarageType))
+md$GarageFinish <- as.integer(factor(md$GarageFinish))
+md$GarageCond <- as.integer(factor(md$GarageCond))
+md$BsmtFinType1 <- as.integer(factor(md$BsmtFinType1))
+md$PavedDrive <- as.integer(factor(md$PavedDrive))
+md$SaleType <- as.integer(factor(md$SaleType))
+md$SaleCondition <- as.integer(factor(md$SaleCondition))
+md$Foundation <- as.integer(factor(md$Foundation))
+md$HeatingQC <- as.integer(factor(md$HeatingQC))
+md$GarageQual <- as.integer(factor(md$GarageQual))
+
+md[is.na(md)] <- 0
+```
+
+Below we have  Log-transform sales price in the training set for the purpose of training and testing sets .
+
+```{r}
+test <- md[md$SalePrice==0,]
+md <- md[md$SalePrice>0,]
+
+md$SalePrice <- log(md$SalePrice)
+
+# Remove ID column from training data
+md <- subset(md, select=-c(Id))
+
+# Build initial model with all fields
+sale_lm <- lm(SalePrice ~ . , data=md)
+summary(sale_lm)
+```
+
+To have more clearer understanding we have Optimized the model using `stepAIC` method.
+
+```{r}
+step_lm <- stepAIC(sale_lm, trace=FALSE)
+summary(step_lm)
+```
+
+$R^2$ is over 0.86 which seems like a good fit. 
+
+Residuals are checked below .
+
+```{r}
+plot(step_lm$fitted.values, step_lm$residuals, 
+     xlab="Fitted Values", ylab="Residuals", main="Fitted Values vs. Residuals")
+abline(h=0)
+
+qqnorm(step_lm$residuals); qqline(step_lm$residuals)
+```
+
+ As observed residuals are  normally distributed. 
+
+```{r}
+# Predict prices for test data
+pred_saleprice <- predict(step_lm, test)
+# Convert from log back to real world number
+pred_saleprice <- sapply(pred_saleprice, exp)
+# Prepare data frame for submission
+kaggle <- data.frame(Id=test$Id, SalePrice=pred_saleprice)
+write.csv(kaggle, file = "submission.csv", row.names=FALSE)
+```
+
+#### Kaggle Submission
+
+My Kaggle username is **simi0202**. My Score as of Dec 15 2019 is **0.13513**
+
+The Submission Data is available on my github reposistory https://github.com/samriti0202/DATA-605/FINAL.  
+
+
+Thank you .
+
+
+
